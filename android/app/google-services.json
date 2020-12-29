@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "508215160223",
+    "project_id": "einkaufsliste-f38a9",
+    "storage_bucket": "einkaufsliste-f38a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508215160223:android:91b743fd63e24dd8dc21aa",
+        "android_client_info": {
+          "package_name": "de.bm.einkaufsliste"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508215160223-44q36u9lj8tip8f89skh2asp7mfm9oln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZfzasVcA7MhdpncmiZ2lMtRb2KnqiNvw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508215160223-44q36u9lj8tip8f89skh2asp7mfm9oln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
