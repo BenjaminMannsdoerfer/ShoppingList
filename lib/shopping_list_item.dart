@@ -30,25 +30,7 @@ class ShoppingItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Expanded(
-                  flex: 5,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                        color: done ? Colors.orange : Colors.black54,
-                        decoration: done
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none),
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () => changeEntry(),
-                  )),
-              Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Text(
                     num,
                     style: TextStyle(
@@ -60,19 +42,69 @@ class ShoppingItem extends StatelessWidget {
                             : TextDecoration.none),
                   )),
               Expanded(
-                  child: IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => increment(),
-              )),
-              Expanded(
-                  child: IconButton(
-                icon: Icon(Icons.remove),
-                onPressed: () => decrement(),
-              ))
+                  flex: 5,
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600,
+                        color: done ? Colors.orange : Colors.black54,
+                        decoration: done
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none),
+                  )),
             ]),
-        trailing: IconButton(
-          icon: Icon(Icons.delete_outline),
-          onPressed: () => remove(),
+        trailing: PopupMenuButton(
+          itemBuilder: (context) {
+            var list = List<PopupMenuEntry<Object>>();
+            list.add(
+                PopupMenuItem(
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => changeEntry(),
+                  ),
+                ));
+            list.add(
+                PopupMenuItem(
+                  child: IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () => increment(),
+                  ),
+                ));
+            list.add(
+              PopupMenuItem(
+                child: IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: () => decrement(),
+              ),
+            ));
+            list.add(
+            PopupMenuItem(
+              child: IconButton(
+                icon: Icon(Icons.delete_outline),
+                onPressed: () => remove(),
+              ),
+            ));
+          return list;
+            /*list.add(
+              PopupMenuDivider(
+                height: 10,
+              ),
+            );*/
+            /*list.add(
+              CheckedPopupMenuItem(
+                  child: IconButton(
+                    icon: Icon(Icons.delete_outline),
+                    onPressed: () => remove(),
+              ),
+            ));
+            return list;*/
+          },
+          icon: Icon(
+            Icons.auto_fix_normal,
+            //size: 20,
+            color: Colors.black,
+          ),
         ),
         onTap: () => Navigator.push<dynamic>(
             context,

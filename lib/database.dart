@@ -9,24 +9,24 @@ class DatabaseService {
 
   Future setItem(String key, bool value, String num) async {
     return await shoppingList
-        .document(shareID)
+        .document(userID)
         .setData({'$key': {'Status': '$value', 'Number': '$num' + 'x'}}, merge: true);
   }
 
   Future updateItem(String key, bool value, String num) async {
     return await shoppingList
-        .document(shareID)
+        .document(userID)
         .updateData({'$key': {'Status': '$value', 'Number': '$num'}});
   }
 
   Future updateNumber(String key, bool value, String num) async {
     return await shoppingList
-        .document(shareID)
+        .document(userID)
         .updateData({'$key': {'Status': '$value', 'Number': '$num' + 'x'}});
   }
 
   Future deleteItem(String key) async {
-    return await shoppingList.document(shareID).updateData({
+    return await shoppingList.document(userID).updateData({
       key: FieldValue.delete()
     });
   }
@@ -40,6 +40,6 @@ class DatabaseService {
   }
 
   Stream getItem() {
-    return shoppingList.document(shareID).snapshots();
+    return shoppingList.document(userID).snapshots();
   }
 }
