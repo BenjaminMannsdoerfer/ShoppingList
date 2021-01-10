@@ -7,22 +7,22 @@ class DatabaseService {
 
   final CollectionReference shoppingList = Firestore.instance.collection('shoppingList');
 
-  Future setItem(String key, bool value, String num) async {
+  Future setItem(String key, bool value, String num, String cat) async {
     return await shoppingList
         .document(userID)
-        .setData({'$key': {'Status': '$value', 'Number': '$num' + 'x'}}, merge: true);
+        .setData({'$key': {'Status': '$value', 'Number': '$num' + 'x', 'Categorie': '$cat'}}, merge: true);
   }
 
-  Future updateItem(String key, bool value, String num) async {
+  Future updateItem(String key, bool value, String num, String cat) async {
     return await shoppingList
         .document(userID)
-        .updateData({'$key': {'Status': '$value', 'Number': '$num'}});
+        .updateData({'$key': {'Status': '$value', 'Number': '$num', 'Categorie': '$cat'}});
   }
 
-  Future updateNumber(String key, bool value, String num) async {
+  Future updateNumber(String key, bool value, String num, String cat) async {
     return await shoppingList
         .document(userID)
-        .updateData({'$key': {'Status': '$value', 'Number': '$num' + 'x'}});
+        .updateData({'$key': {'Status': '$value', 'Number': '$num' + 'x', 'Categorie': '$cat'}});
   }
 
   Future deleteItem(String key) async {

@@ -149,6 +149,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.6"
+  grouped_list:
+    dependency: "direct main"
+    description:
+      name: grouped_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.7.1"
   http:
     dependency: transitive
     description:

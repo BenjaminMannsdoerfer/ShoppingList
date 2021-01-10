@@ -7,6 +7,7 @@ import 'shopping_list_item.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 void main() => runApp(MaterialApp(home: ToDo()));
 
@@ -16,32 +17,32 @@ class ToDo extends StatefulWidget {
 }
 
 class _ToDoState extends State<ToDo> {
-  ScrollController _scrollController = new ScrollController();
   FirebaseUser user;
   DatabaseService database;
 
-  void addItem(String key, String num) {
-    database.setItem(key, false, num);
+  void addItem(String key, String num, String cat) {
+    database.setItem(key, false, num, cat);
     Navigator.pop(context);
   }
 
   void deleteItem(String key) {
     database.deleteItem(key);
+    Navigator.pop(context);
   }
 
-  void toggleDone(String key, bool value, String num) {
-    database.updateItem(key, !value, num);
+  void toggleDone(String key, bool value, String num, String cat) {
+    database.updateItem(key, !value, num, cat);
   }
 
-  void incrementNumber(String key, bool value, String num) {
+  void incrementNumber(String key, bool value, String num, String cat) {
     int count = int.parse(num.substring(0, num.length - 1));
-    print(count);
     ++count;
     num = count.toString();
-    database.updateNumber(key, value, num);
+    database.updateNumber(key, value, num, cat);
+    Navigator.pop(context);
   }
 
-  void decrementNumber(String key, bool value, String num) {
+  void decrementNumber(String key, bool value, String num, String cat) {
     int count = int.parse(num.substring(0, num.length - 1));
     if (count > 1) {
       --count;
@@ -57,11 +58,12 @@ class _ToDoState extends State<ToDo> {
           fontSize: 16.0);
     }
     num = count.toString();
-    database.updateNumber(key, value, num);
+    database.updateNumber(key, value, num, cat);
+    Navigator.pop(context);
   }
 
-  void updateItem(String key, bool status, String num) {
-    database.updateItem(key, status, num);
+  void updateItem(String key, bool status, String num, cat) {
+    database.updateItem(key, status, num, cat);
   }
 
   void newEntry() {
@@ -72,11 +74,12 @@ class _ToDoState extends State<ToDo> {
         });
   }
 
-  void changeEntry(String oldKey, bool status, String num) {
+  void changeEntry(String oldKey, bool status, String num, String cat) {
     showDialog<AlertDialog>(
         context: context,
         builder: (BuildContext context) {
-          return ChangeItemDialog(updateItem, status, num, deleteItem, oldKey);
+          return ChangeItemDialog(
+              updateItem, status, num, deleteItem, oldKey, cat);
         });
   }
 
@@ -112,28 +115,78 @@ class _ToDoState extends State<ToDo> {
                     return Center(child: CircularProgressIndicator());
                   } else {
                     Map<String, dynamic> item = snapshot.data.data;
-                    return ListView.builder(
-                      controller: _scrollController,
-                      itemCount: item.length,
-                      itemBuilder: (context, i) {
-                        String key = item.keys.elementAt(i);
-                        var selected = item['$key'].values.elementAt(0);
-                        if (selected == 'true')
-                          selected = true;
-                        else
-                          selected = false;
-                        String num = item['$key'].values.elementAt(1);
-                        return ShoppingItem(
-                            key,
-                            num,
+                    List<dynamic> elements = item.entries.toList();
+                    return GroupedListView(
+                        elements: elements,
+                        groupBy: (shoppingItem) {
+                          return shoppingItem.value['Categorie'];
+                        },
+                        groupHeaderBuilder: (shoppingItem) {
+                          return Container(
+                            child: Column(
+                              children: [
+                                Divider(
+                                  color: Colors.grey,
+                                  thickness: 2,
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 0, vertical: 0),
+                                    child: Row(children: <Widget>[
+                                      Checkbox(
+                                        value: true,
+                                        onChanged: (bool value) => value = true,
+                                        activeColor: Colors.blue,
+                                      ),
+                                      Text(
+                                        shoppingItem.value['Categorie'],
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ])),
+                                Divider(
+                                  color: Colors.grey,
+                                  thickness: 2,
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                        indexedItemBuilder:
+                            (context, dynamic shoppingItem, int index) {
+                          var selected = shoppingItem.value['Status'];
+                          if (selected == 'true')
+                            selected = true;
+                          else
+                            selected = false;
+                          return ShoppingItem(
+                            shoppingItem.key,
+                            shoppingItem.value['Number'],
                             selected,
-                            () => incrementNumber(key, selected, num),
-                            () => decrementNumber(key, selected, num),
-                            () => changeEntry(key, selected, num),
-                            () => deleteItem(key),
-                            () => toggleDone(key, selected, num));
-                      },
-                    );
+                            () => incrementNumber(
+                                shoppingItem.key,
+                                selected,
+                                shoppingItem.value['Number'],
+                                shoppingItem.value['Categorie']),
+                            () => decrementNumber(
+                                shoppingItem.key,
+                                selected,
+                                shoppingItem.value['Number'],
+                                shoppingItem.value['Categorie']),
+                            () => changeEntry(
+                                shoppingItem.key,
+                                selected,
+                                shoppingItem.value['Number'],
+                                shoppingItem.value['Categorie']),
+                            () => deleteItem(shoppingItem.key),
+                            () => toggleDone(
+                                shoppingItem.key,
+                                selected,
+                                shoppingItem.value['Number'],
+                                shoppingItem.value['Categorie']),
+                          );
+                        });
                   }
                 },
               );

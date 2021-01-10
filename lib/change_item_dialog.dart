@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ChangeItemDialog extends StatefulWidget {
-  final void Function(String oldKey, bool status, String num) changeEntry;
+  final void Function(String oldKey, bool status, String num, String cat) changeEntry;
   final void Function(String oldKey) deleteItem;
   final bool status;
   final String num;
   final String oldKey;
+  final String cat;
 
-  const ChangeItemDialog(this.changeEntry, this.status, this.num, this.deleteItem, this.oldKey);
+  const ChangeItemDialog(this.changeEntry, this.status, this.num, this.deleteItem, this.oldKey, this.cat);
 
   @override
   _ChangeItemDialogState createState() => _ChangeItemDialogState();
@@ -19,13 +20,15 @@ class _ChangeItemDialogState extends State<ChangeItemDialog> {
   bool status;
   String num;
   String oldKey;
+  String cat;
 
   void save() {
     if (formKey.currentState.validate()) {
       status = widget.status;
       num = widget.num;
       oldKey = widget.oldKey;
-      widget.changeEntry(key, status, num);
+      cat = widget.cat;
+      widget.changeEntry(key, status, num, cat);
       widget.deleteItem(oldKey);
     }
     Navigator.of(context).pop();

@@ -16,7 +16,6 @@ class ShoppingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int index;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: ListTile(
@@ -55,54 +54,36 @@ class ShoppingItem extends StatelessWidget {
                   )),
             ]),
         trailing: PopupMenuButton(
-          itemBuilder: (context) {
-            var list = List<PopupMenuEntry<Object>>();
-            list.add(
-                PopupMenuItem(
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () => changeEntry(),
-                  ),
-                ));
-            list.add(
-                PopupMenuItem(
-                  child: IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () => increment(),
-                  ),
-                ));
-            list.add(
-              PopupMenuItem(
-                child: IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: () => decrement(),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<Object>>[
+            PopupMenuItem(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => changeEntry(),
               ),
-            ));
-            list.add(
+            ),
+            PopupMenuItem(
+              value: ()=> Navigator.pop(context),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => increment(),
+
+              ),
+            ),
+            PopupMenuItem(
+              child: IconButton(
+                icon: Icon(Icons.remove),
+                onPressed: () => decrement(),
+              ),
+            ),
             PopupMenuItem(
               child: IconButton(
                 icon: Icon(Icons.delete_outline),
                 onPressed: () => remove(),
               ),
-            ));
-          return list;
-            /*list.add(
-              PopupMenuDivider(
-                height: 10,
-              ),
-            );*/
-            /*list.add(
-              CheckedPopupMenuItem(
-                  child: IconButton(
-                    icon: Icon(Icons.delete_outline),
-                    onPressed: () => remove(),
-              ),
-            ));
-            return list;*/
-          },
+            ),
+          ],
           icon: Icon(
             Icons.auto_fix_normal,
-            //size: 20,
             color: Colors.black,
           ),
         ),
